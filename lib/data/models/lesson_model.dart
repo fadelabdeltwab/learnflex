@@ -8,33 +8,19 @@ class LessonModel {
   final String model;
   final List<QuestionModel> questions;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   LessonModel({
     required this.id,
     required this.title,
     required this.description,
     required this.image,
     required this.model,
-<<<<<<< HEAD
     required this.questions,
-=======
-        required this.questions,
-
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   });
 
   factory LessonModel.fromJson(Map<String, dynamic> json) {
-    // تحويل قايمة الأسئلة من الـ JSON لـ List<QuestionModel>
     List<dynamic> questionsJson = json['questions'] as List<dynamic>;
-<<<<<<< HEAD
     List<QuestionModel> questionsList =
         questionsJson.map((q) => QuestionModel.fromJson(q)).toList();
-=======
-    List<QuestionModel> questionsList = questionsJson.map((q) => QuestionModel.fromJson(q)).toList();
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 
     return LessonModel(
       id: json['id'] as int,

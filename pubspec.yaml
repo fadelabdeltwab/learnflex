@@ -33,10 +33,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   device_preview: ^1.2.0
   dio: ^5.8.0+1
-<<<<<<< HEAD
   excel: ^2.0.0
-=======
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
+
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -45,12 +43,9 @@ dependencies:
   http: ^1.4.0
   image_picker: ^1.1.2
   model_viewer_plus: ^1.9.3
-<<<<<<< HEAD
   open_file: ^3.5.10
   path_provider: ^2.1.5
   permission_handler: ^12.0.0+1
-=======
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 
 dev_dependencies:
 

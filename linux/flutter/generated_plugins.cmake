@@ -4,10 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_linux
-<<<<<<< HEAD
   open_file_linux
-=======
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   url_launcher_linux
 )
 

@@ -18,10 +18,7 @@ class TermScreen extends StatefulWidget {
 class _TermScreenState extends State<TermScreen> {
   final dio = Dio();
   List<TermModel> termList = [];
-<<<<<<< HEAD
   List<TermModel> filteredTermList = [];
-=======
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 
   @override
   void initState() {
@@ -32,28 +29,17 @@ class _TermScreenState extends State<TermScreen> {
   Future<void> fetchTerms() async {
     try {
       final response = await dio.get(
-<<<<<<< HEAD
         "http://192.168.1.6:5000/api/?list=terms&grades=${widget.grade}",
       );
       final data = response.data;
       if (data['terms'] != null) {
-        final fetchedTerms = (data['terms'] as List)
-            .map((e) => TermModel(name: e.toString()))
-            .toList();
+        final fetchedTerms =
+            (data['terms'] as List)
+                .map((e) => TermModel(name: e.toString()))
+                .toList();
         setState(() {
           termList = fetchedTerms;
           filteredTermList = fetchedTerms;
-=======
-        "http://localhost:5000/api/?list=terms&grades=${widget.grade}",
-      );
-      final data = response.data;
-      if (data['terms'] != null) {
-        setState(() {
-          termList =
-              (data['terms'] as List)
-                  .map((e) => TermModel(name: e.toString()))
-                  .toList();
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
         });
       }
     } catch (e) {
@@ -61,19 +47,19 @@ class _TermScreenState extends State<TermScreen> {
     }
   }
 
-<<<<<<< HEAD
   void _filterTerms(String query) {
-    final result = termList.where((term) =>
-        term.name.toLowerCase().contains(query.toLowerCase())
-    ).toList();
+    final result =
+        termList
+            .where(
+              (term) => term.name.toLowerCase().contains(query.toLowerCase()),
+            )
+            .toList();
 
     setState(() {
       filteredTermList = result;
     });
   }
 
-=======
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   void navigateToSubjects(String term) {
     Navigator.pushNamed(context, '/subjects/${widget.grade}/$term');
   }
@@ -85,36 +71,21 @@ class _TermScreenState extends State<TermScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
-<<<<<<< HEAD
           SearchBarComponent(onChanged: _filterTerms),
           Expanded(
-            child: filteredTermList.isEmpty
-                ? const Center(child: Text("لا توجد فصول مطابقة"))
-                : ListView.builder(
-              itemCount: filteredTermList.length,
-              itemBuilder: (context, index) {
-                return Term(
-                  termModel: filteredTermList[index],
-=======
-          SearchBarComponent(onChanged: (value) {}),
-          Expanded(
-            child: termList.isEmpty
-                ? Center(child: CircularProgressIndicator())
-                : ListView.builder(
-              itemCount: termList.length,
-              itemBuilder: (context, index) {
-                return Term(
-                  termModel: termList[index],
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
-                  grade: widget.grade,
-                );
-              },
-            ),
+            child:
+                filteredTermList.isEmpty
+                    ? const Center(child: Text("لا توجد فصول مطابقة"))
+                    : ListView.builder(
+                      itemCount: filteredTermList.length,
+                      itemBuilder: (context, index) {
+                        return Term(
+                          termModel: filteredTermList[index],
+                          grade: widget.grade,
+                        );
+                      },
+                    ),
           ),
-<<<<<<< HEAD
-=======
-
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
         ],
       ),
     );

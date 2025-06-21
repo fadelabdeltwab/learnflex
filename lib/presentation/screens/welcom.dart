@@ -10,6 +10,7 @@ class WelcomScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
+          // الخلفية الأساسية بتدرج ألوان
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -25,37 +26,17 @@ class WelcomScreen extends StatelessWidget {
               ),
             ),
           ),
-<<<<<<< HEAD
 
+          // صورة الخلفية شبه شفافة
           Image.asset(
             "assets/image/welcom.png",
-              height: double.infinity,
-              width: double.infinity,
-              fit: BoxFit.cover,
-
-
+            height: double.infinity,
+            width: double.infinity,
+            fit: BoxFit.cover,
             opacity: const AlwaysStoppedAnimation(0.8),
-=======
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth > 600) {
-                return Image.asset(
-                  "assets/image/welcom.png",
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  opacity: const AlwaysStoppedAnimation(0.8),
-                );
-              } else {
-                return Image.asset(
-                  "assets/image/welcom.png",
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  opacity: const AlwaysStoppedAnimation(0.8),
-                );
-              }
-            },
->>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
           ),
+
+          // الزر والعبارة الترحيبية
           Positioned(
             bottom: 50,
             left: 20,
