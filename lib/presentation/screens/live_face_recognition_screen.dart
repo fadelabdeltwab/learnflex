@@ -1,13 +1,19 @@
 import 'dart:async';
+<<<<<<< HEAD
 import 'dart:convert';
 import 'dart:io';
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+<<<<<<< HEAD
 import 'package:excel/excel.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:open_file/open_file.dart';
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 
 class LiveFaceRecognitionScreen extends StatefulWidget {
   const LiveFaceRecognitionScreen({super.key});
@@ -17,6 +23,7 @@ class LiveFaceRecognitionScreen extends StatefulWidget {
       _LiveFaceRecognitionScreenState();
 }
 
+<<<<<<< HEAD
 class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
   late CameraController _cameraController;
   late List<CameraDescription> _cameras;
@@ -30,6 +37,15 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
     final now = DateTime.now();
     return "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
   }
+=======
+class _LiveFaceRecognitionScreenState
+    extends State<LiveFaceRecognitionScreen> {
+  late CameraController _cameraController;
+  late List<CameraDescription> _cameras;
+  String recognitionResult = '';
+  Timer? _timer;
+  bool _isCameraInitialized = false;
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 
   @override
   void initState() {
@@ -46,10 +62,24 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
             (camera) => camera.lensDirection == CameraLensDirection.front,
         orElse: () => _cameras.first,
       );
+<<<<<<< HEAD
       _cameraController = CameraController(frontCamera, ResolutionPreset.medium);
       await _cameraController.initialize();
       if (!mounted) return;
       setState(() => _isCameraInitialized = true);
+=======
+
+      _cameraController =
+          CameraController(frontCamera, ResolutionPreset.medium);
+
+      await _cameraController.initialize();
+      if (!mounted) return;
+
+      setState(() {
+        _isCameraInitialized = true;
+      });
+
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
       _startStreaming();
     } catch (e) {
       print("Camera initialization failed: $e");
@@ -64,6 +94,7 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
 
         final request = http.MultipartRequest(
           'POST',
+<<<<<<< HEAD
           Uri.parse('http://192.168.1.6:8000/recognize/'),
         );
         request.files.add(http.MultipartFile.fromBytes('file', bytes, filename: 'frame.jpg'));
@@ -100,12 +131,29 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
             print("⛔ Already recorded today: $key");
           }
         }
+=======
+          Uri.parse('http://127.0.0.1:8000/recognize/'),
+        );
+        request.files.add(http.MultipartFile.fromBytes(
+          'file',
+          bytes,
+          filename: 'frame.jpg',
+        ));
+
+        final response = await request.send();
+        final body = await response.stream.bytesToString();
+
+        setState(() {
+          recognitionResult = body;
+        });
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
       } catch (e) {
         print("Error sending frame: $e");
       }
     });
   }
 
+<<<<<<< HEAD
   Future<void> exportToExcel() async {
     var status = await Permission.storage.request();
     if (!status.isGranted) {
@@ -159,6 +207,8 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
     }
   }
 
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   @override
   void dispose() {
     _timer?.cancel();
@@ -173,7 +223,13 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
     if (kIsWeb) {
       return Scaffold(
         appBar: AppBar(title: const Text("Face Recognition")),
+<<<<<<< HEAD
         body: const Center(child: Text("Camera not supported on web")),
+=======
+        body: const Center(
+          child: Text("Camera not supported on web"),
+        ),
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
       );
     }
 
@@ -185,6 +241,7 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
     }
 
     return Scaffold(
+<<<<<<< HEAD
       appBar: AppBar(
         title: const Text("Face Recognition"),
         actions: [
@@ -221,6 +278,20 @@ class _LiveFaceRecognitionScreenState extends State<LiveFaceRecognitionScreen> {
                 ),
               ),
             ),
+=======
+      appBar: AppBar(title: const Text("Face Recognition")),
+      body: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: _cameraController.value.aspectRatio,
+            child: CameraPreview(_cameraController),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            "Result: $recognitionResult",
+            style: const TextStyle(fontSize: 18),
+          ),
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
         ],
       ),
     );

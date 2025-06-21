@@ -25,6 +25,7 @@ class WelcomScreen extends StatelessWidget {
               ),
             ),
           ),
+<<<<<<< HEAD
 
           Image.asset(
             "assets/image/welcom.png",
@@ -34,6 +35,26 @@ class WelcomScreen extends StatelessWidget {
 
 
             opacity: const AlwaysStoppedAnimation(0.8),
+=======
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth > 600) {
+                return Image.asset(
+                  "assets/image/welcom.png",
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  opacity: const AlwaysStoppedAnimation(0.8),
+                );
+              } else {
+                return Image.asset(
+                  "assets/image/welcom.png",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  opacity: const AlwaysStoppedAnimation(0.8),
+                );
+              }
+            },
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
           ),
           Positioned(
             bottom: 50,

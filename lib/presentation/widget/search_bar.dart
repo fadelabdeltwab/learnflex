@@ -10,13 +10,19 @@ class SearchBarComponent extends StatefulWidget {
 }
 
 class _SearchBarComponentState extends State<SearchBarComponent> {
+<<<<<<< HEAD
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
   Color _borderColor = const Color(0xffd2bffa);
+=======
+  FocusNode _focusNode = FocusNode();
+  Color _borderColor = Color(0xffd2bffa);
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
 
     _focusNode.addListener(() {
       setState(() {
@@ -35,6 +41,14 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
     _controller.clear();
     widget.onChanged?.call('');
     FocusScope.of(context).unfocus(); // يخفي الكيبورد
+=======
+    _focusNode.addListener(() {
+      setState(() {
+        _borderColor =
+            _focusNode.hasFocus ? Color(0xFF3e1cb7) : Color(0xffd2bffa);
+      });
+    });
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   }
 
   @override
@@ -48,11 +62,15 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextField(
+<<<<<<< HEAD
         controller: _controller,
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
         focusNode: _focusNode,
         onChanged: widget.onChanged,
         decoration: InputDecoration(
           hintText: "Search",
+<<<<<<< HEAD
           hintStyle: const TextStyle(color: Color(0xffa3a3a3), fontSize: 19),
           border: InputBorder.none,
           prefixIcon: const Icon(Icons.search, color: Color(0xFF3e1cb7)),
@@ -62,10 +80,16 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
             onPressed: _clearText,
           )
               : null,
+=======
+          hintStyle: TextStyle(color: Color(0xffa3a3a3), fontSize: 19),
+          border: InputBorder.none,
+          prefixIcon: Icon(Icons.search, color: Color(0xFF3e1cb7)),
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
         ),
       ),
     );
   }
+<<<<<<< HEAD
 
   @override
   void dispose() {
@@ -73,4 +97,6 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
     _controller.dispose();
     super.dispose();
   }
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 }

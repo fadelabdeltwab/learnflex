@@ -24,8 +24,11 @@ class UnitsScreen extends StatefulWidget {
 class _UnitsScreenState extends State<UnitsScreen> {
   final dio = Dio();
   List<String> units = [];
+<<<<<<< HEAD
   List<String> filteredUnits = [];
 
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   bool isLoading = true;
   String? errorMessage;
 
@@ -38,6 +41,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
   Future<void> fetchUnits() async {
     try {
       final response = await dio.get(
+<<<<<<< HEAD
         "http://192.168.1.6:5000/api/?list=units&grades=${widget.grade}&term=${widget.term}&subject=${widget.subject}",
       );
 
@@ -46,6 +50,13 @@ class _UnitsScreenState extends State<UnitsScreen> {
       setState(() {
         units = data;
         filteredUnits = data;
+=======
+        "http://localhost:5000/api/?list=units&grades=${widget.grade}&term=${widget.term}&subject=${widget.subject}",
+      );
+
+      setState(() {
+        units = List<String>.from(response.data['units'] ?? []);
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
         isLoading = false;
       });
     } catch (e) {
@@ -56,6 +67,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
     }
   }
 
+<<<<<<< HEAD
   void _filterUnits(String query) {
     final result = units.where((unit) =>
         unit.toLowerCase().contains(query.toLowerCase())
@@ -66,6 +78,8 @@ class _UnitsScreenState extends State<UnitsScreen> {
     });
   }
 
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +87,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
+<<<<<<< HEAD
           SearchBarComponent(onChanged: _filterUnits),
           const SizedBox(height: 16),
           Expanded(
@@ -94,6 +109,30 @@ class _UnitsScreenState extends State<UnitsScreen> {
                 );
               },
             ),
+=======
+          SearchBarComponent(onChanged: (value) {}),
+          const SizedBox(height: 16),
+          Expanded(
+            child:
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : errorMessage != null
+                    ? Center(child: Text(errorMessage!))
+                    : units.isEmpty
+                    ? const Center(child: Text("لا توجد وحدات لعرضها"))
+                    : ListView.builder(
+                      itemCount: units.length,
+                      itemBuilder: (context, index) {
+                        final unit = units[index];
+                        return UnitsComponent(
+                          unit: unit,
+                          grade: widget.grade,
+                          term: widget.term,
+                          subject: widget.subject,
+                        );
+                      },
+                    ),
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
           ),
         ],
       ),

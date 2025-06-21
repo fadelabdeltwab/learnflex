@@ -19,7 +19,10 @@ class SubjectScreen extends StatefulWidget {
 class _SubjectScreenState extends State<SubjectScreen> {
   final dio = Dio();
   List<SubjectModel> subjectList = [];
+<<<<<<< HEAD
   List<SubjectModel> filteredSubjects = [];
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
 
   Map<String, String> subjectImages = {
     "Math": "assets/image/math.png",
@@ -35,12 +38,17 @@ class _SubjectScreenState extends State<SubjectScreen> {
   Future<void> fetchSubjects() async {
     try {
       final response = await dio.get(
+<<<<<<< HEAD
         "http://192.168.1.6:5000/api/?list=subjects&grades=${widget.grade}&term=${widget.term}",
+=======
+        "http://localhost:5000/api/?list=subjects&grades=${widget.grade}&term=${widget.term}",
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
       );
 
       final data = response.data;
 
       if (data['subjects'] != null) {
+<<<<<<< HEAD
         final subjects = (data['subjects'] as List).map((e) {
           final name = e.toString();
           return SubjectModel(
@@ -55,6 +63,19 @@ class _SubjectScreenState extends State<SubjectScreen> {
         setState(() {
           subjectList = subjects;
           filteredSubjects = subjects;
+=======
+        setState(() {
+          subjectList = (data['subjects'] as List).map((e) {
+            final name = e.toString();
+            return SubjectModel(
+              id: subjectList.length + 1,
+              name: name,
+              subjectImage: subjectImages[name] ?? 'assets/image/default.png',
+              grade: widget.grade,
+              term: widget.term,
+            );
+          }).toList();
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
         });
       }
     } catch (e) {
@@ -62,6 +83,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
     }
   }
 
+<<<<<<< HEAD
   void _filterSubjects(String query) {
     final result = subjectList.where((subject) =>
         subject.name.toLowerCase().contains(query.toLowerCase())
@@ -72,6 +94,8 @@ class _SubjectScreenState extends State<SubjectScreen> {
     });
   }
 
+=======
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +103,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
+<<<<<<< HEAD
           SearchBarComponent(onChanged: _filterSubjects),
           Expanded(
             child: filteredSubjects.isEmpty
@@ -88,6 +113,19 @@ class _SubjectScreenState extends State<SubjectScreen> {
               itemBuilder: (context, index) {
                 return SubjectComponent(
                   subjectModel: filteredSubjects[index],
+=======
+          SearchBarComponent(
+            onChanged: (value) {},
+          ),
+          Expanded(
+            child: subjectList.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+              itemCount: subjectList.length,
+              itemBuilder: (context, index) {
+                return SubjectComponent(
+                  subjectModel: subjectList[index],
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
                 );
               },
             ),

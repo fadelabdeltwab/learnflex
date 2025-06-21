@@ -126,6 +126,7 @@ class _FinalResultScreenState extends State<FinalResultScreen>
 
     // تنفيذ الأنيميشن بالتسلسل
     Future.delayed(const Duration(milliseconds: 400), () {
+<<<<<<< HEAD
       _textController.forward();
     })
         .then((_) {
@@ -141,6 +142,23 @@ class _FinalResultScreenState extends State<FinalResultScreen>
         .then((_) {
       _starsController.forward();
     });
+=======
+          _textController.forward();
+        })
+        .then((_) {
+          return Future.delayed(const Duration(milliseconds: 700), () {
+            _niceWorkController.forward();
+          });
+        })
+        .then((_) {
+          return Future.delayed(const Duration(milliseconds: 900), () {
+            _circleController.forward();
+          });
+        })
+        .then((_) {
+          _starsController.forward();
+        });
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
   }
 
   @override
@@ -174,11 +192,19 @@ class _FinalResultScreenState extends State<FinalResultScreen>
               ),
               SizedBox(
                 height:
+<<<<<<< HEAD
                 screenWidth > 900
                     ? MediaQuery.of(context).size.height * 0.14
                     : screenWidth > 600 && screenWidth <= 900
                     ? MediaQuery.of(context).size.height * 0.15
                     : MediaQuery.of(context).size.height * 0.14,
+=======
+                    screenWidth > 900
+                        ? MediaQuery.of(context).size.height * 0.14
+                        : screenWidth > 600 && screenWidth <= 900
+                        ? MediaQuery.of(context).size.height * 0.15
+                        : MediaQuery.of(context).size.height * 0.14,
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
               ), //105
               FadeTransition(
                 opacity: _niceWorkAnimation,
@@ -195,12 +221,21 @@ class _FinalResultScreenState extends State<FinalResultScreen>
               ),
               SizedBox(
                 height:
+<<<<<<< HEAD
                 screenWidth > 900
                     ? MediaQuery.of(context).size.height *
                     0.012 //0.3
                     : screenWidth > 600 && screenWidth <= 900
                     ? MediaQuery.of(context).size.height * 0.1
                     : MediaQuery.of(context).size.height * 0.01,
+=======
+                    screenWidth > 900
+                        ? MediaQuery.of(context).size.height *
+                            0.012 //0.3
+                        : screenWidth > 600 && screenWidth <= 900
+                        ? MediaQuery.of(context).size.height * 0.1
+                        : MediaQuery.of(context).size.height * 0.01,
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
               ), //15
               CustomFinalCheckIcon(
                 circle1Animation: _circle1Animation,
@@ -209,11 +244,19 @@ class _FinalResultScreenState extends State<FinalResultScreen>
               ),
               SizedBox(
                 height:
+<<<<<<< HEAD
                 screenWidth > 900
                     ? MediaQuery.of(context).size.height * 0.03
                     : screenWidth > 600 && screenWidth <= 900
                     ? MediaQuery.of(context).size.height * 0.13
                     : MediaQuery.of(context).size.height * 0.02,
+=======
+                    screenWidth > 900
+                        ? MediaQuery.of(context).size.height * 0.03
+                        : screenWidth > 600 && screenWidth <= 900
+                        ? MediaQuery.of(context).size.height * 0.13
+                        : MediaQuery.of(context).size.height * 0.02,
+>>>>>>> b8f7deb89b6439143d3456d36ce7038626e6821c
               ), //15
               CustomStarsIcons(
                 star1Color: _star1Color,
