@@ -24,6 +24,8 @@ class UnitsScreen extends StatefulWidget {
 class _UnitsScreenState extends State<UnitsScreen> {
   final dio = Dio();
   List<String> units = [];
+  List<String> filteredUnits = [];
+
   bool isLoading = true;
   String? errorMessage;
 
@@ -36,11 +38,14 @@ class _UnitsScreenState extends State<UnitsScreen> {
   Future<void> fetchUnits() async {
     try {
       final response = await dio.get(
-        "http://localhost:5000/api/?list=units&grades=${widget.grade}&term=${widget.term}&subject=${widget.subject}",
+        "http://192.168.1.6:5000/api/?list=units&grades=${widget.grade}&term=${widget.term}&subject=${widget.subject}",
       );
 
+      final data = List<String>.from(response.data['units'] ?? []);
+
       setState(() {
-        units = List<String>.from(response.data['units'] ?? []);
+        units = data;
+        filteredUnits = data;
         isLoading = false;
       });
     } catch (e) {
@@ -51,6 +56,16 @@ class _UnitsScreenState extends State<UnitsScreen> {
     }
   }
 
+  void _filterUnits(String query) {
+    final result = units.where((unit) =>
+        unit.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+
+    setState(() {
+      filteredUnits = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,28 +73,27 @@ class _UnitsScreenState extends State<UnitsScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
-          SearchBarComponent(onChanged: (value) {}),
+          SearchBarComponent(onChanged: _filterUnits),
           const SizedBox(height: 16),
           Expanded(
-            child:
-                isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : errorMessage != null
-                    ? Center(child: Text(errorMessage!))
-                    : units.isEmpty
-                    ? const Center(child: Text("لا توجد وحدات لعرضها"))
-                    : ListView.builder(
-                      itemCount: units.length,
-                      itemBuilder: (context, index) {
-                        final unit = units[index];
-                        return UnitsComponent(
-                          unit: unit,
-                          grade: widget.grade,
-                          term: widget.term,
-                          subject: widget.subject,
-                        );
-                      },
-                    ),
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : errorMessage != null
+                ? Center(child: Text(errorMessage!))
+                : filteredUnits.isEmpty
+                ? const Center(child: Text("لا توجد وحدات مطابقة"))
+                : ListView.builder(
+              itemCount: filteredUnits.length,
+              itemBuilder: (context, index) {
+                final unit = filteredUnits[index];
+                return UnitsComponent(
+                  unit: unit,
+                  grade: widget.grade,
+                  term: widget.term,
+                  subject: widget.subject,
+                );
+              },
+            ),
           ),
         ],
       ),

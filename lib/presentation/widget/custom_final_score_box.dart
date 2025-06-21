@@ -3,15 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:learn_fix/constant.dart';
 
 class CustomFinalScoreBox extends StatelessWidget {
-  const CustomFinalScoreBox({super.key, required this.textAnimation});
+  const CustomFinalScoreBox({super.key, required this.textAnimation, required this.score, required this.totalQuestions});
   final int result = 100;
+    final int score, totalQuestions;
+
   final Animation<double> textAnimation;
 
   @override
   Widget build(BuildContext context) {
+     final screenWidth = MediaQuery.of(context).size.width;
     return Positioned(
       top: 120,
-      left: 78,
+      left: screenWidth > 1280
+              ? screenWidth * 0.435
+              : screenWidth > 900
+              ? MediaQuery.of(context).size.width * 0.42
+              : screenWidth > 600 && screenWidth <= 900
+              ? MediaQuery.of(context).size.width * 0.37
+              : MediaQuery.of(context).size.width * 0.24,//78
       child: Container(
         height: 175,
         width: 175,
@@ -54,7 +63,7 @@ class CustomFinalScoreBox extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '$result ',
+                      '${score}/${totalQuestions}',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: kFinalScoreBoxColor,
@@ -68,6 +77,7 @@ class CustomFinalScoreBox extends StatelessWidget {
                       style: TextStyle(
                         color: kFinalScoreBoxColor,
                         fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],

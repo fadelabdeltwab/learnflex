@@ -29,10 +29,10 @@ class LessonScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  'http://localhost:5000${lessonModel.image}',
+                  'http://192.168.1.6:5000${lessonModel.image}',
                   height: 250,
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
 
@@ -78,9 +78,9 @@ class LessonScreen extends StatelessWidget {
                     alignment: Alignment.center,
                     child: SizedBox(
                       height: 300,
-                      width: 300,
+                      width: 600,
                       child: ModelViewer(
-                        src: 'http://localhost:5000${lessonModel.model}',
+                        src: 'http://192.168.1.6:5000${lessonModel.model}',
 
                         alt: "نموذج ثلاثي الأبعاد",
                         ar: true,
@@ -96,7 +96,7 @@ class LessonScreen extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: const CustomNavBar(),
+      bottomNavigationBar: CustomNavBar(lessonModel: lessonModel),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {

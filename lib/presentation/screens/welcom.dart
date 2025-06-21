@@ -25,9 +25,14 @@ class WelcomScreen extends StatelessWidget {
               ),
             ),
           ),
+
           Image.asset(
             "assets/image/welcom.png",
-            fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.cover,
+
+
             opacity: const AlwaysStoppedAnimation(0.8),
           ),
           Positioned(

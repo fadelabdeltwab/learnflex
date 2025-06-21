@@ -19,6 +19,7 @@ class SubjectScreen extends StatefulWidget {
 class _SubjectScreenState extends State<SubjectScreen> {
   final dio = Dio();
   List<SubjectModel> subjectList = [];
+  List<SubjectModel> filteredSubjects = [];
 
   Map<String, String> subjectImages = {
     "Math": "assets/image/math.png",
@@ -34,28 +35,41 @@ class _SubjectScreenState extends State<SubjectScreen> {
   Future<void> fetchSubjects() async {
     try {
       final response = await dio.get(
-        "http://localhost:5000/api/?list=subjects&grades=${widget.grade}&term=${widget.term}",
+        "http://192.168.1.6:5000/api/?list=subjects&grades=${widget.grade}&term=${widget.term}",
       );
 
       final data = response.data;
 
       if (data['subjects'] != null) {
+        final subjects = (data['subjects'] as List).map((e) {
+          final name = e.toString();
+          return SubjectModel(
+            id: subjectList.length + 1,
+            name: name,
+            subjectImage: subjectImages[name] ?? 'assets/image/default.png',
+            grade: widget.grade,
+            term: widget.term,
+          );
+        }).toList();
+
         setState(() {
-          subjectList = (data['subjects'] as List).map((e) {
-            final name = e.toString();
-            return SubjectModel(
-              id: subjectList.length + 1,
-              name: name,
-              subjectImage: subjectImages[name] ?? 'assets/image/default.png',
-              grade: widget.grade,
-              term: widget.term,
-            );
-          }).toList();
+          subjectList = subjects;
+          filteredSubjects = subjects;
         });
       }
     } catch (e) {
       print("Error loading subjects: $e");
     }
+  }
+
+  void _filterSubjects(String query) {
+    final result = subjectList.where((subject) =>
+        subject.name.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+
+    setState(() {
+      filteredSubjects = result;
+    });
   }
 
   @override
@@ -65,17 +79,15 @@ class _SubjectScreenState extends State<SubjectScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
-          SearchBarComponent(
-            onChanged: (value) {},
-          ),
+          SearchBarComponent(onChanged: _filterSubjects),
           Expanded(
-            child: subjectList.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+            child: filteredSubjects.isEmpty
+                ? const Center(child: Text("لا توجد نتائج"))
                 : ListView.builder(
-              itemCount: subjectList.length,
+              itemCount: filteredSubjects.length,
               itemBuilder: (context, index) {
                 return SubjectComponent(
-                  subjectModel: subjectList[index],
+                  subjectModel: filteredSubjects[index],
                 );
               },
             ),

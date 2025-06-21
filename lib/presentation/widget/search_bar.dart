@@ -10,18 +10,31 @@ class SearchBarComponent extends StatefulWidget {
 }
 
 class _SearchBarComponentState extends State<SearchBarComponent> {
-  FocusNode _focusNode = FocusNode();
-  Color _borderColor = Color(0xffd2bffa);
+  final FocusNode _focusNode = FocusNode();
+  final TextEditingController _controller = TextEditingController();
+  Color _borderColor = const Color(0xffd2bffa);
 
   @override
   void initState() {
     super.initState();
+
     _focusNode.addListener(() {
       setState(() {
-        _borderColor =
-            _focusNode.hasFocus ? Color(0xFF3e1cb7) : Color(0xffd2bffa);
+        _borderColor = _focusNode.hasFocus
+            ? const Color(0xFF3e1cb7)
+            : const Color(0xffd2bffa);
       });
     });
+
+    _controller.addListener(() {
+      setState(() {}); // عشان يظهر زر clear لما نكتب
+    });
+  }
+
+  void _clearText() {
+    _controller.clear();
+    widget.onChanged?.call('');
+    FocusScope.of(context).unfocus(); // يخفي الكيبورد
   }
 
   @override
@@ -35,15 +48,29 @@ class _SearchBarComponentState extends State<SearchBarComponent> {
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextField(
+        controller: _controller,
         focusNode: _focusNode,
         onChanged: widget.onChanged,
         decoration: InputDecoration(
           hintText: "Search",
-          hintStyle: TextStyle(color: Color(0xffa3a3a3), fontSize: 19),
+          hintStyle: const TextStyle(color: Color(0xffa3a3a3), fontSize: 19),
           border: InputBorder.none,
-          prefixIcon: Icon(Icons.search, color: Color(0xFF3e1cb7)),
+          prefixIcon: const Icon(Icons.search, color: Color(0xFF3e1cb7)),
+          suffixIcon: _controller.text.isNotEmpty
+              ? IconButton(
+            icon: const Icon(Icons.clear, color: Colors.grey),
+            onPressed: _clearText,
+          )
+              : null,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 }

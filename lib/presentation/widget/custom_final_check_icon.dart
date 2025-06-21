@@ -14,6 +14,8 @@ class CustomFinalCheckIcon extends StatelessWidget {
   final Animation<double> circle1Animation, circle2Animation, checkAnimation;
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Stack(
       children: [
         ScaleTransition(
@@ -41,7 +43,14 @@ class CustomFinalCheckIcon extends StatelessWidget {
 
         Positioned(
           top: 23,
-          left: 122    ,
+          left:
+              screenWidth > 1280
+                  ? screenWidth * 0.458
+                  : screenWidth > 900
+                  ? MediaQuery.of(context).size.width * 0.45
+                  : screenWidth > 600 && screenWidth <= 900
+                  ? MediaQuery.of(context).size.width * 0.418
+                  : MediaQuery.of(context).size.width * 0.32, //122
           child: ScaleTransition(
             scale: circle2Animation,
             child: Center(

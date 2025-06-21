@@ -5,13 +5,9 @@ import 'package:learn_fix/presentation/screens/splash.dart';
 import 'package:learn_fix/presentation/screens/test.dart';
 
 void main() {
-  runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const LearnFlex(),
-    ),
-  );
+  runApp(const LearnFlex());
 }
+
 
 class LearnFlex extends StatelessWidget {
   const LearnFlex({super.key});

@@ -1,9 +1,11 @@
+import 'package:learn_fix/data/models/question_model.dart';
 class Lesson {
   final int id;
   final String title;
   final String description;
   final String image;
   final String model;
+  final List<QuestionModel> questions;
 
   Lesson({
     required this.id,
@@ -11,15 +13,21 @@ class Lesson {
     required this.description,
     required this.image,
     required this.model,
+    required this.questions,
   });
 
   factory Lesson.fromJson(Map<String, dynamic> json) {
+    // تحويل قايمة الأسئلة من الـ JSON لـ List<QuestionModel>
+    List<dynamic> questionsJson = json['questions'] as List<dynamic>;
+    List<QuestionModel> questionsList = questionsJson.map((q) => QuestionModel.fromJson(q)).toList();
+
     return Lesson(
-      id: json['id'],
-      title: json['title'],
-      description: json['description'],
-      image: json['image'],
-      model: json['model'],
+      id: json['id'] as int,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      image: json['image'] as String,
+      model: json['model'] as String,
+      questions: questionsList,
     );
   }
 }
@@ -29,18 +37,14 @@ class UnitModel {
   final String title;
   final List<Lesson> lessons;
 
-  UnitModel({
-    required this.unit,
-    required this.title,
-    required this.lessons,
-  });
+  UnitModel({required this.unit, required this.title, required this.lessons});
 
   factory UnitModel.fromJson(Map<String, dynamic> json) {
     return UnitModel(
       unit: json['unit'],
       title: json['title'],
       lessons:
-      (json['lessons'] as List).map((e) => Lesson.fromJson(e)).toList(),
+          (json['lessons'] as List).map((e) => Lesson.fromJson(e)).toList(),
     );
   }
 }
@@ -52,9 +56,7 @@ class Subject {
 
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
-      units: (json['units'] as List)
-          .map((e) => UnitModel.fromJson(e))
-          .toList(),
+      units: (json['units'] as List).map((e) => UnitModel.fromJson(e)).toList(),
     );
   }
 }

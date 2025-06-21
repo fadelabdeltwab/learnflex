@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../data/models/lesson_model.dart';
 import '../widget/app_bar.dart';
 import '../widget/lessons_comp.dart';
-import '../widget/search_bar.dart'; // تأكد إنه نفس اسم الملف
+import '../widget/search_bar.dart';
 
 class LessonsScreen extends StatefulWidget {
   final String grade;
@@ -26,6 +26,8 @@ class LessonsScreen extends StatefulWidget {
 
 class _LessonsScreenState extends State<LessonsScreen> {
   List<LessonModel> lessons = [];
+  List<LessonModel> filteredLessons = [];
+
   bool isLoading = true;
   String error = '';
 
@@ -38,7 +40,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
   Future<void> fetchLessons() async {
     try {
       final response = await Dio().get(
-        'http://localhost:5000/api/',
+        'http://192.168.1.6:5000/api/',
         queryParameters: {
           'grades': widget.grade,
           'term': widget.term,
@@ -51,8 +53,11 @@ class _LessonsScreenState extends State<LessonsScreen> {
 
       final List<dynamic> lessonList = data['lessons'] ?? [];
 
+      final lessonModels = lessonList.map((e) => LessonModel.fromJson(e)).toList();
+
       setState(() {
-        lessons = lessonList.map((e) => LessonModel.fromJson(e)).toList();
+        lessons = lessonModels;
+        filteredLessons = lessonModels;
         isLoading = false;
       });
     } catch (e) {
@@ -63,6 +68,16 @@ class _LessonsScreenState extends State<LessonsScreen> {
     }
   }
 
+  void _filterLessons(String query) {
+    final result = lessons.where((lesson) =>
+        lesson.title.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+
+    setState(() {
+      filteredLessons = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,19 +85,18 @@ class _LessonsScreenState extends State<LessonsScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
-          SearchBarComponent(onChanged: (value) {}),
+          SearchBarComponent(onChanged: _filterLessons),
           Expanded(
-            child:
-            isLoading
+            child: isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : error.isNotEmpty
                 ? Center(child: Text(error))
-                : lessons.isEmpty
-                ? const Center(child: Text('لا توجد دروس لعرضها'))
+                : filteredLessons.isEmpty
+                ? const Center(child: Text('لا توجد نتائج مطابقة'))
                 : ListView.builder(
-              itemCount: lessons.length,
+              itemCount: filteredLessons.length,
               itemBuilder: (context, index) {
-                return LessonsComponent(lessonModel: lessons[index]);
+                return LessonsComponent(lessonModel: filteredLessons[index]);
               },
             ),
           ),

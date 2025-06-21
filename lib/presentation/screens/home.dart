@@ -15,39 +15,57 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<GradeModel> gradeList = [];
+  List<GradeModel> filteredGrades = [];
 
   final dio = Dio();
   bool isLoading = true;
   String? errorMessage;
+
   @override
   void initState() {
     super.initState();
     fetchGrades();
-    isLoading = false;
   }
 
   Future<void> fetchGrades() async {
     try {
-      final response = await dio.get("http://localhost:5000/api/?list=grades");
+      final response =
+      await dio.get("http://192.168.1.6:5000/api/?list=grades");
       final data = response.data;
       if (data['grades'] != null) {
+        final grades = (data['grades'] as List)
+            .map((e) => GradeModel(id: 0, name: e.toString()))
+            .toList();
         setState(() {
-          gradeList =
-              (data['grades'] as List)
-                  .map((e) => GradeModel(id: 0, name: e.toString()))
-                  .toList();
+          gradeList = grades;
+          filteredGrades = grades; // في الأول نعرض الكل
+          isLoading = false;
         });
       }
     } catch (e) {
       print("Failed to load grades: $e");
+      setState(() {
+        errorMessage = "حدث خطأ أثناء تحميل الصفوف";
+        isLoading = false;
+      });
     }
+  }
+
+  void _filterGrades(String query) {
+    final result = gradeList
+        .where((grade) => grade.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    setState(() {
+      filteredGrades = result;
+    });
   }
 
   void navigateToTerms(String grade) {
     Navigator.pushNamed(
       context,
       '/terms/$grade',
-    ); // أو استخدم MaterialPageRoute حسب مشروعك
+    );
   }
 
   @override
@@ -57,22 +75,20 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
-          SearchBarComponent(onChanged: (value) {}),
+          SearchBarComponent(onChanged: _filterGrades),
           Expanded(
-            child:
-                isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : errorMessage != null
-                    ? Center(child: Text(errorMessage!))
-                    : gradeList.isEmpty
-                    ? const Center(child: Text("لا توجد صفوف متاحة"))
-                    : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: gradeList.length,
-                      itemBuilder: (context, index) {
-                        return Grade(gradeModel: gradeList[index]);
-                      },
-                    ),
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : errorMessage != null
+                ? Center(child: Text(errorMessage!))
+                : filteredGrades.isEmpty
+                ? const Center(child: Text("لا توجد نتائج مطابقة"))
+                : ListView.builder(
+              itemCount: filteredGrades.length,
+              itemBuilder: (context, index) {
+                return Grade(gradeModel: filteredGrades[index]);
+              },
+            ),
           ),
         ],
       ),

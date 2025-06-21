@@ -18,6 +18,7 @@ class TermScreen extends StatefulWidget {
 class _TermScreenState extends State<TermScreen> {
   final dio = Dio();
   List<TermModel> termList = [];
+  List<TermModel> filteredTermList = [];
 
   @override
   void initState() {
@@ -28,20 +29,31 @@ class _TermScreenState extends State<TermScreen> {
   Future<void> fetchTerms() async {
     try {
       final response = await dio.get(
-        "http://localhost:5000/api/?list=terms&grades=${widget.grade}",
+        "http://192.168.1.6:5000/api/?list=terms&grades=${widget.grade}",
       );
       final data = response.data;
       if (data['terms'] != null) {
+        final fetchedTerms = (data['terms'] as List)
+            .map((e) => TermModel(name: e.toString()))
+            .toList();
         setState(() {
-          termList =
-              (data['terms'] as List)
-                  .map((e) => TermModel(name: e.toString()))
-                  .toList();
+          termList = fetchedTerms;
+          filteredTermList = fetchedTerms;
         });
       }
     } catch (e) {
       print("Failed to load terms: $e");
     }
+  }
+
+  void _filterTerms(String query) {
+    final result = termList.where((term) =>
+        term.name.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+
+    setState(() {
+      filteredTermList = result;
+    });
   }
 
   void navigateToSubjects(String term) {
@@ -55,21 +67,20 @@ class _TermScreenState extends State<TermScreen> {
       appBar: CustomAppBar(),
       body: Column(
         children: [
-          SearchBarComponent(onChanged: (value) {}),
+          SearchBarComponent(onChanged: _filterTerms),
           Expanded(
-            child: termList.isEmpty
-                ? Center(child: CircularProgressIndicator())
+            child: filteredTermList.isEmpty
+                ? const Center(child: Text("لا توجد فصول مطابقة"))
                 : ListView.builder(
-              itemCount: termList.length,
+              itemCount: filteredTermList.length,
               itemBuilder: (context, index) {
                 return Term(
-                  termModel: termList[index],
+                  termModel: filteredTermList[index],
                   grade: widget.grade,
                 );
               },
             ),
           ),
-
         ],
       ),
     );

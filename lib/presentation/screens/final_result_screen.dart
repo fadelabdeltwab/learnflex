@@ -1,13 +1,28 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_fix/constant.dart';
+import 'package:learn_fix/data/models/lesson_model.dart';
+import 'package:learn_fix/data/models/question_model.dart';
 import 'package:learn_fix/presentation/widget/custom_final_check_icon.dart';
 import 'package:learn_fix/presentation/widget/custom_final_group.dart';
 import 'package:learn_fix/presentation/widget/custom_quiz_nav_bar.dart';
 import 'package:learn_fix/presentation/widget/custom_stars_icons.dart';
 
 class FinalResultScreen extends StatefulWidget {
-  const FinalResultScreen({super.key});
+  const FinalResultScreen({
+    super.key,
+    required this.score,
+    required this.totalQuestions,
+    required this.lessonModel,
+    required this.questions,
+    required this.currentQuestionIndex,
+    required this.selectedAnswers,
+  });
+  final int score, totalQuestions;
+  final LessonModel lessonModel;
+  final List<QuestionModel> questions; // لتمرير الأسئلة للرجوع
+  final int currentQuestionIndex; // فهرس السؤال الأخير
+  final List<int?> selectedAnswers; // الإجابات المحفوظة
 
   @override
   State<FinalResultScreen> createState() => _FinalResultScreenState();
@@ -111,21 +126,21 @@ class _FinalResultScreenState extends State<FinalResultScreen>
 
     // تنفيذ الأنيميشن بالتسلسل
     Future.delayed(const Duration(milliseconds: 400), () {
-          _textController.forward();
-        })
+      _textController.forward();
+    })
         .then((_) {
-          return Future.delayed(const Duration(milliseconds: 700), () {
-            _niceWorkController.forward();
-          });
-        })
+      return Future.delayed(const Duration(milliseconds: 700), () {
+        _niceWorkController.forward();
+      });
+    })
         .then((_) {
-          return Future.delayed(const Duration(milliseconds: 900), () {
-            _circleController.forward();
-          });
-        })
+      return Future.delayed(const Duration(milliseconds: 900), () {
+        _circleController.forward();
+      });
+    })
         .then((_) {
-          _starsController.forward();
-        });
+      _starsController.forward();
+    });
   }
 
   @override
@@ -139,6 +154,7 @@ class _FinalResultScreenState extends State<FinalResultScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -147,24 +163,58 @@ class _FinalResultScreenState extends State<FinalResultScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomFinalGroup(textAnimation: _textAnimation),
-              SizedBox(height: 105),
+              CustomFinalGroup(
+                textAnimation: _textAnimation,
+                currentQuestionIndex: widget.currentQuestionIndex,
+                score: widget.score,
+                totalQuestions: widget.totalQuestions,
+                questions: widget.questions,
+                lessonModel: widget.lessonModel,
+                selectedAnswers: widget.selectedAnswers,
+              ),
+              SizedBox(
+                height:
+                screenWidth > 900
+                    ? MediaQuery.of(context).size.height * 0.14
+                    : screenWidth > 600 && screenWidth <= 900
+                    ? MediaQuery.of(context).size.height * 0.15
+                    : MediaQuery.of(context).size.height * 0.14,
+              ), //105
               FadeTransition(
                 opacity: _niceWorkAnimation,
                 child: Center(
                   child: Text(
                     'Nice Work',
-                    style: TextStyle(color: kFinalScoreBoxColor, fontSize: 24),
+                    style: TextStyle(
+                      color: kFinalScoreBoxColor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(
+                height:
+                screenWidth > 900
+                    ? MediaQuery.of(context).size.height *
+                    0.012 //0.3
+                    : screenWidth > 600 && screenWidth <= 900
+                    ? MediaQuery.of(context).size.height * 0.1
+                    : MediaQuery.of(context).size.height * 0.01,
+              ), //15
               CustomFinalCheckIcon(
                 circle1Animation: _circle1Animation,
                 circle2Animation: _circle2Animation,
                 checkAnimation: _checkAnimation,
               ),
-              SizedBox(height: 15),
+              SizedBox(
+                height:
+                screenWidth > 900
+                    ? MediaQuery.of(context).size.height * 0.03
+                    : screenWidth > 600 && screenWidth <= 900
+                    ? MediaQuery.of(context).size.height * 0.13
+                    : MediaQuery.of(context).size.height * 0.02,
+              ), //15
               CustomStarsIcons(
                 star1Color: _star1Color,
                 star2Color: _star2Color,
@@ -174,7 +224,10 @@ class _FinalResultScreenState extends State<FinalResultScreen>
           ),
         ),
       ),
-      bottomNavigationBar: CustomQuizNavBar(),
+      bottomNavigationBar: CustomQuizNavBar(
+        lessonModel: widget.lessonModel,
+        questions: widget.questions,
+      ),
     );
   }
 }
